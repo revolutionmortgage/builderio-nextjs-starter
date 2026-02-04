@@ -1,6 +1,6 @@
-# Fusion Agent Instructions
+# Builder.io Fusion Design System Guide
 
-This project uses a **shadcn/ui design system**. Always use the existing components from `@/components/ui/` instead of creating raw HTML elements or custom components.
+This starter template is equipped with a complete design system based on **shadcn/ui** and the **Rev brand**. Use this guide to create stunning, production-quality UIs.
 
 ## Tech Stack
 
@@ -8,12 +8,19 @@ This project uses a **shadcn/ui design system**. Always use the existing compone
 - **Styling:** Tailwind CSS v4
 - **Components:** shadcn/ui (Radix UI primitives + Tailwind)
 - **Language:** TypeScript
+- **Icons:** Lucide React
+- **Theme:** next-themes (dark mode support)
 
-## Component Usage Rules
+## Quick Start
 
-### Always use design system components
+All components are in `components/ui/`. Import them like:
 
-Never create raw HTML elements when a component exists. For example:
+```tsx
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+```
+
+**RULE: Always use design system components. Never create raw HTML elements when a component exists.**
 
 ```tsx
 // DO THIS
@@ -24,125 +31,294 @@ import { Button } from "@/components/ui/button"
 <button className="border rounded px-4 py-2">Click me</button>
 ```
 
-### Import path
+---
 
-All UI components are imported from `@/components/ui/`:
+## Brand Colors
+
+The design system uses Rev's cyan-based brand with complementary colors:
+
+| Color | Usage | Class |
+|-------|-------|-------|
+| **Primary (Cyan)** | CTAs, links, interactive elements | `bg-primary`, `text-primary` |
+| **Secondary** | Subtle backgrounds, secondary actions | `bg-secondary`, `text-secondary` |
+| **Accent** | Hover states, highlights | `bg-accent`, `text-accent` |
+| **Destructive (Pink)** | Errors, warnings, delete actions | `bg-destructive`, `text-destructive` |
+| **Muted** | Disabled states, placeholders | `bg-muted`, `text-muted-foreground` |
+
+### Extended Brand Palette
 
 ```tsx
-import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+// Brand variations
+className="text-brand"      // Primary cyan text
+className="bg-brand"        // Primary cyan background
+className="bg-brand-light"  // Light cyan
+className="bg-brand-dark"   // Dark cyan
+
+// Status colors
+className="bg-success"      // Green - success states
+className="bg-warning"      // Amber - warnings
+className="bg-info"         // Blue - informational
+
+// Gradients
+className="gradient-brand"       // Cyan to light cyan
+className="gradient-brand-dark"  // Dark cyan to cyan
 ```
 
-## Available Components
+### Semantic Color Tokens
 
-### Button
-**File:** `components/ui/button.tsx`
-**Variants:** `default`, `destructive`, `outline`, `secondary`, `ghost`, `link`
-**Sizes:** `default`, `xs`, `sm`, `lg`, `icon`, `icon-xs`, `icon-sm`, `icon-lg`
+Always use semantic tokens, not raw colors:
+
+- `bg-background` / `text-foreground` - Main background/text
+- `bg-primary` / `text-primary-foreground` - Primary actions
+- `bg-secondary` / `text-secondary-foreground` - Secondary elements
+- `bg-muted` / `text-muted-foreground` - Subdued elements
+- `bg-accent` / `text-accent-foreground` - Accents/highlights
+- `bg-destructive` - Destructive/error states
+- `border-border` - Borders
+- `ring-ring` - Focus rings
+
+---
+
+## Typography
+
+**Primary Font:** Montserrat (weights: 300, 400, 500, 600, 700)
+**Script Fonts:** Have Heart One & Two (for decorative/signature text)
 
 ```tsx
-<Button>Default</Button>
-<Button variant="destructive">Delete</Button>
-<Button variant="outline" size="sm">Small Outline</Button>
-<Button variant="ghost" size="icon"><Icon /></Button>
+// Font weights
+className="font-light"     // 300
+className="font-normal"    // 400
+className="font-medium"    // 500
+className="font-semibold"  // 600
+className="font-bold"      // 700
+
+// Script fonts (decorative - for signatures, special headings)
+className="font-script"     // Have Heart One
+className="font-script-alt" // Have Heart Two
 ```
 
-### Card
-**File:** `components/ui/card.tsx`
-**Exports:** `Card`, `CardHeader`, `CardFooter`, `CardTitle`, `CardDescription`, `CardContent`
+---
+
+## Dark Mode
+
+Dark mode is fully supported. Components automatically adapt.
 
 ```tsx
-<Card>
+import { useTheme } from "next-themes";
+
+const { theme, setTheme } = useTheme();
+setTheme("dark"); // or "light" or "system"
+```
+
+---
+
+## Utility Classes
+
+```tsx
+// Glass morphism effect (frosted glass)
+className="glass"
+
+// Brand-colored shadow
+className="shadow-brand"
+
+// Hover lift animation (card lifts up on hover)
+className="hover-lift"
+
+// Brand utilities
+className="text-brand bg-brand border-brand"
+
+// Gradients
+className="gradient-brand gradient-brand-dark"
+```
+
+---
+
+## Icons
+
+This project uses **Lucide React** icons:
+
+```tsx
+import { Home, Settings, User, ChevronRight, Check, X } from "lucide-react";
+
+<Button>
+  <Home className="mr-2 h-4 w-4" />
+  Home
+</Button>
+```
+
+---
+
+## All Available Components (56 Total)
+
+### Layout & Structure
+| Component | File | Exports |
+|-----------|------|---------|
+| **Card** | `card.tsx` | `Card`, `CardHeader`, `CardFooter`, `CardTitle`, `CardDescription`, `CardContent` |
+| **Separator** | `separator.tsx` | `Separator` |
+| **Aspect Ratio** | `aspect-ratio.tsx` | `AspectRatio` |
+| **Resizable** | `resizable.tsx` | `ResizablePanelGroup`, `ResizablePanel`, `ResizableHandle` |
+| **Scroll Area** | `scroll-area.tsx` | `ScrollArea`, `ScrollBar` |
+| **Sidebar** | `sidebar.tsx` | `Sidebar`, `SidebarHeader`, `SidebarContent`, `SidebarFooter`, `SidebarMenu`, `SidebarMenuItem`, `SidebarMenuButton` |
+
+### Navigation
+| Component | File | Exports |
+|-----------|------|---------|
+| **Navigation Menu** | `navigation-menu.tsx` | `NavigationMenu`, `NavigationMenuList`, `NavigationMenuItem`, `NavigationMenuContent`, `NavigationMenuTrigger`, `NavigationMenuLink` |
+| **Breadcrumb** | `breadcrumb.tsx` | `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator` |
+| **Tabs** | `tabs.tsx` | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` |
+| **Pagination** | `pagination.tsx` | `Pagination`, `PaginationContent`, `PaginationItem`, `PaginationLink`, `PaginationPrevious`, `PaginationNext` |
+| **Menubar** | `menubar.tsx` | `Menubar`, `MenubarMenu`, `MenubarTrigger`, `MenubarContent`, `MenubarItem` |
+
+### Forms & Inputs
+| Component | File | Variants/Props |
+|-----------|------|----------------|
+| **Button** | `button.tsx` | Variants: `default`, `destructive`, `outline`, `secondary`, `ghost`, `link`. Sizes: `default`, `xs`, `sm`, `lg`, `icon` |
+| **Input** | `input.tsx` | Standard input element |
+| **Textarea** | `textarea.tsx` | Multi-line input |
+| **Select** | `select.tsx` | `Select`, `SelectTrigger`, `SelectContent`, `SelectItem`, `SelectValue` |
+| **Native Select** | `native-select.tsx` | Native HTML select |
+| **Checkbox** | `checkbox.tsx` | `Checkbox` |
+| **Radio Group** | `radio-group.tsx` | `RadioGroup`, `RadioGroupItem` |
+| **Switch** | `switch.tsx` | `Switch` |
+| **Slider** | `slider.tsx` | `Slider` |
+| **Label** | `label.tsx` | `Label` |
+| **Form** | `form.tsx` | `Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormDescription`, `FormMessage` |
+| **Input OTP** | `input-otp.tsx` | `InputOTP`, `InputOTPGroup`, `InputOTPSlot`, `InputOTPSeparator` |
+| **Calendar** | `calendar.tsx` | `Calendar` |
+| **Combobox** | `combobox.tsx` | Searchable select |
+| **Input Group** | `input-group.tsx` | Input with addons |
+| **Field** | `field.tsx` | Form field wrapper |
+
+### Feedback & Overlays
+| Component | File | Exports |
+|-----------|------|---------|
+| **Dialog** | `dialog.tsx` | `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogFooter`, `DialogTitle`, `DialogDescription`, `DialogClose` |
+| **Alert Dialog** | `alert-dialog.tsx` | `AlertDialog`, `AlertDialogTrigger`, `AlertDialogContent`, `AlertDialogHeader`, `AlertDialogFooter`, `AlertDialogTitle`, `AlertDialogDescription`, `AlertDialogAction`, `AlertDialogCancel` |
+| **Sheet** | `sheet.tsx` | `Sheet`, `SheetTrigger`, `SheetContent`, `SheetHeader`, `SheetFooter`, `SheetTitle`, `SheetDescription` |
+| **Drawer** | `drawer.tsx` | `Drawer`, `DrawerTrigger`, `DrawerContent`, `DrawerHeader`, `DrawerFooter`, `DrawerTitle`, `DrawerDescription` |
+| **Popover** | `popover.tsx` | `Popover`, `PopoverTrigger`, `PopoverContent` |
+| **Tooltip** | `tooltip.tsx` | `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipProvider` |
+| **Hover Card** | `hover-card.tsx` | `HoverCard`, `HoverCardTrigger`, `HoverCardContent` |
+| **Alert** | `alert.tsx` | `Alert`, `AlertTitle`, `AlertDescription` |
+| **Sonner** | `sonner.tsx` | `Toaster` (use `toast()` from sonner) |
+| **Progress** | `progress.tsx` | `Progress` |
+| **Skeleton** | `skeleton.tsx` | `Skeleton` |
+| **Spinner** | `spinner.tsx` | `Spinner` |
+
+### Data Display
+| Component | File | Exports |
+|-----------|------|---------|
+| **Table** | `table.tsx` | `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableHead`, `TableRow`, `TableCell`, `TableCaption` |
+| **Avatar** | `avatar.tsx` | `Avatar`, `AvatarImage`, `AvatarFallback` |
+| **Badge** | `badge.tsx` | Variants: `default`, `secondary`, `destructive`, `outline` |
+| **Chart** | `chart.tsx` | Recharts wrapper components |
+| **Accordion** | `accordion.tsx` | `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` |
+| **Collapsible** | `collapsible.tsx` | `Collapsible`, `CollapsibleTrigger`, `CollapsibleContent` |
+
+### Actions & Menus
+| Component | File | Exports |
+|-----------|------|---------|
+| **Dropdown Menu** | `dropdown-menu.tsx` | `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuLabel`, `DropdownMenuSeparator` |
+| **Context Menu** | `context-menu.tsx` | `ContextMenu`, `ContextMenuTrigger`, `ContextMenuContent`, `ContextMenuItem` |
+| **Command** | `command.tsx` | `Command`, `CommandInput`, `CommandList`, `CommandEmpty`, `CommandGroup`, `CommandItem` |
+| **Toggle** | `toggle.tsx` | `Toggle` |
+| **Toggle Group** | `toggle-group.tsx` | `ToggleGroup`, `ToggleGroupItem` |
+| **Button Group** | `button-group.tsx` | `ButtonGroup` |
+
+### Utilities
+| Component | File | Purpose |
+|-----------|------|---------|
+| **Kbd** | `kbd.tsx` | Keyboard shortcut display |
+| **Direction** | `direction.tsx` | RTL/LTR context |
+| **Empty** | `empty.tsx` | Empty state placeholder |
+
+---
+
+## Component Examples
+
+### Hero Section
+```tsx
+<section className="py-24 px-6">
+  <div className="max-w-4xl mx-auto text-center">
+    <Badge variant="secondary" className="mb-4">New Feature</Badge>
+    <h1 className="text-5xl font-bold tracking-tight mb-6">
+      Build stunning interfaces
+    </h1>
+    <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+      Create beautiful, accessible components with our design system.
+    </p>
+    <div className="flex gap-4 justify-center">
+      <Button size="lg">Get Started</Button>
+      <Button size="lg" variant="outline">Learn More</Button>
+    </div>
+  </div>
+</section>
+```
+
+### Feature Cards Grid
+```tsx
+<div className="grid md:grid-cols-3 gap-6">
+  <Card className="hover-lift">
+    <CardHeader>
+      <CardTitle>Feature One</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-muted-foreground">
+        Description of this amazing feature.
+      </p>
+    </CardContent>
+  </Card>
+  {/* Repeat for other cards */}
+</div>
+```
+
+### Pricing Card
+```tsx
+<Card className="border-primary shadow-brand">
   <CardHeader>
-    <CardTitle>Title</CardTitle>
-    <CardDescription>Description text</CardDescription>
+    <Badge className="w-fit">Popular</Badge>
+    <CardTitle className="text-2xl">Pro Plan</CardTitle>
+    <div className="text-4xl font-bold">
+      $29<span className="text-lg font-normal text-muted-foreground">/mo</span>
+    </div>
   </CardHeader>
   <CardContent>
-    <p>Card content here</p>
+    <ul className="space-y-2">
+      <li className="flex items-center gap-2">
+        <Check className="h-4 w-4 text-primary" />
+        <span>Unlimited projects</span>
+      </li>
+    </ul>
   </CardContent>
+  <CardFooter>
+    <Button className="w-full">Subscribe</Button>
+  </CardFooter>
 </Card>
 ```
 
-### Input
-**File:** `components/ui/input.tsx`
-
+### Form with Validation
 ```tsx
-<Input type="email" placeholder="Email" />
+<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <FormField
+      control={form.control}
+      name="email"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input placeholder="you@example.com" {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <Button type="submit">Submit</Button>
+  </form>
+</Form>
 ```
 
-### Label
-**File:** `components/ui/label.tsx`
-
-```tsx
-<Label htmlFor="email">Email</Label>
-<Input id="email" type="email" />
-```
-
-### Textarea
-**File:** `components/ui/textarea.tsx`
-
-```tsx
-<Textarea placeholder="Type your message here." />
-```
-
-### Select
-**File:** `components/ui/select.tsx`
-**Exports:** `Select`, `SelectContent`, `SelectItem`, `SelectTrigger`, `SelectValue`, `SelectGroup`, `SelectLabel`, `SelectSeparator`
-
-```tsx
-<Select>
-  <SelectTrigger>
-    <SelectValue placeholder="Select an option" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="option1">Option 1</SelectItem>
-    <SelectItem value="option2">Option 2</SelectItem>
-  </SelectContent>
-</Select>
-```
-
-### Checkbox
-**File:** `components/ui/checkbox.tsx`
-
-```tsx
-<div className="flex items-center space-x-2">
-  <Checkbox id="terms" />
-  <Label htmlFor="terms">Accept terms</Label>
-</div>
-```
-
-### Radio Group
-**File:** `components/ui/radio-group.tsx`
-**Exports:** `RadioGroup`, `RadioGroupItem`
-
-```tsx
-<RadioGroup defaultValue="option1">
-  <div className="flex items-center space-x-2">
-    <RadioGroupItem value="option1" id="option1" />
-    <Label htmlFor="option1">Option 1</Label>
-  </div>
-  <div className="flex items-center space-x-2">
-    <RadioGroupItem value="option2" id="option2" />
-    <Label htmlFor="option2">Option 2</Label>
-  </div>
-</RadioGroup>
-```
-
-### Switch
-**File:** `components/ui/switch.tsx`
-
-```tsx
-<div className="flex items-center space-x-2">
-  <Switch id="airplane-mode" />
-  <Label htmlFor="airplane-mode">Airplane Mode</Label>
-</div>
-```
-
-### Dialog
-**File:** `components/ui/dialog.tsx`
-**Exports:** `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogFooter`, `DialogTitle`, `DialogDescription`, `DialogClose`
-
+### Dialog Example
 ```tsx
 <Dialog>
   <DialogTrigger asChild>
@@ -161,51 +337,7 @@ import { Input } from "@/components/ui/input"
 </Dialog>
 ```
 
-### Sheet (Slide-out panel)
-**File:** `components/ui/sheet.tsx`
-**Exports:** `Sheet`, `SheetTrigger`, `SheetContent`, `SheetHeader`, `SheetFooter`, `SheetTitle`, `SheetDescription`, `SheetClose`
-
-```tsx
-<Sheet>
-  <SheetTrigger asChild>
-    <Button>Open Sheet</Button>
-  </SheetTrigger>
-  <SheetContent>
-    <SheetHeader>
-      <SheetTitle>Sheet Title</SheetTitle>
-    </SheetHeader>
-    <div>Sheet content</div>
-  </SheetContent>
-</Sheet>
-```
-
-### Dropdown Menu
-**File:** `components/ui/dropdown-menu.tsx`
-**Exports:** `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuCheckboxItem`, `DropdownMenuRadioItem`, `DropdownMenuLabel`, `DropdownMenuSeparator`, `DropdownMenuShortcut`, `DropdownMenuGroup`, `DropdownMenuSub`, `DropdownMenuSubContent`, `DropdownMenuSubTrigger`, `DropdownMenuRadioGroup`
-
-```tsx
-<DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <Button variant="outline">Open Menu</Button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent>
-    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem>Profile</DropdownMenuItem>
-    <DropdownMenuItem>Settings</DropdownMenuItem>
-    <DropdownMenuItem>Logout</DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
-```
-
-### Navigation Menu
-**File:** `components/ui/navigation-menu.tsx`
-**Exports:** `NavigationMenu`, `NavigationMenuList`, `NavigationMenuItem`, `NavigationMenuContent`, `NavigationMenuTrigger`, `NavigationMenuLink`, `NavigationMenuIndicator`, `NavigationMenuViewport`, `navigationMenuTriggerStyle`
-
-### Tabs
-**File:** `components/ui/tabs.tsx`
-**Exports:** `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`
-
+### Tabs Example
 ```tsx
 <Tabs defaultValue="tab1">
   <TabsList>
@@ -217,60 +349,7 @@ import { Input } from "@/components/ui/input"
 </Tabs>
 ```
 
-### Accordion
-**File:** `components/ui/accordion.tsx`
-**Exports:** `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`
-
-```tsx
-<Accordion type="single" collapsible>
-  <AccordionItem value="item-1">
-    <AccordionTrigger>Is it accessible?</AccordionTrigger>
-    <AccordionContent>Yes, it follows WAI-ARIA guidelines.</AccordionContent>
-  </AccordionItem>
-</Accordion>
-```
-
-### Avatar
-**File:** `components/ui/avatar.tsx`
-**Exports:** `Avatar`, `AvatarImage`, `AvatarFallback`
-
-```tsx
-<Avatar>
-  <AvatarImage src="https://example.com/avatar.jpg" alt="User" />
-  <AvatarFallback>JD</AvatarFallback>
-</Avatar>
-```
-
-### Badge
-**File:** `components/ui/badge.tsx`
-**Variants:** `default`, `secondary`, `destructive`, `outline`
-
-```tsx
-<Badge>Default</Badge>
-<Badge variant="secondary">Secondary</Badge>
-<Badge variant="destructive">Error</Badge>
-<Badge variant="outline">Outline</Badge>
-```
-
-### Separator
-**File:** `components/ui/separator.tsx`
-
-```tsx
-<Separator />
-<Separator orientation="vertical" />
-```
-
-### Skeleton (Loading placeholder)
-**File:** `components/ui/skeleton.tsx`
-
-```tsx
-<Skeleton className="h-12 w-12 rounded-full" />
-<Skeleton className="h-4 w-[250px]" />
-```
-
-### Sonner (Toast notifications)
-**File:** `components/ui/sonner.tsx`
-
+### Toast Notifications
 ```tsx
 // Add <Toaster /> to your layout
 import { Toaster } from "@/components/ui/sonner"
@@ -282,43 +361,52 @@ toast.success("Success!")
 toast.error("Something went wrong")
 ```
 
-## Styling Guidelines
+---
 
-### Use Tailwind CSS classes
-All styling should use Tailwind CSS utility classes. The design tokens are defined in `globals.css`.
+## Design Principles
 
-### Color tokens
-Use semantic color tokens, not raw colors:
-- `bg-background` / `text-foreground` - Main background/text
-- `bg-primary` / `text-primary-foreground` - Primary actions
-- `bg-secondary` / `text-secondary-foreground` - Secondary elements
-- `bg-muted` / `text-muted-foreground` - Subdued elements
-- `bg-accent` / `text-accent-foreground` - Accents/highlights
-- `bg-destructive` - Destructive/error states
-- `border-border` - Borders
-- `ring-ring` - Focus rings
+1. **Use semantic colors** - `primary`, `secondary`, `muted`, not raw hex values
+2. **Leverage variants** - Components have built-in variants (e.g., `Button variant="outline"`)
+3. **Consistent spacing** - Use Tailwind's spacing scale (4, 6, 8, 12, 16, 24)
+4. **Dark mode aware** - All colors automatically adapt to dark mode
+5. **Accessible** - All components are keyboard navigable and screen reader friendly
 
-### Spacing
-Use Tailwind's spacing scale consistently: `p-4`, `m-2`, `gap-4`, etc.
+## Creating Stunning UIs
 
-### Responsive design
-Use Tailwind breakpoints: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+### Do:
+- Use the primary cyan color for CTAs and important actions
+- Apply `hover-lift` to interactive cards
+- Use `glass` for modern overlay effects
+- Combine `Card` with `shadow-brand` for elevated sections
+- Use `Badge` to highlight new/important items
+- Apply proper spacing (py-24 for sections, gap-6 for grids)
+- Use responsive classes: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
 
-```tsx
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-```
+### Don't:
+- Use raw color values - always use semantic tokens
+- Forget dark mode - test both themes
+- Overcrowd layouts - embrace whitespace
+- Skip loading states - use Skeleton and Spinner
+- Create custom components when shadcn/ui has one
+
+---
 
 ## File Structure
 
 ```
 app/
-  layout.tsx      # Root layout
+  layout.tsx      # Root layout with fonts & theme
   page.tsx        # Home page
-  globals.css     # Design tokens & global styles
+  globals.css     # Design tokens & custom styles
 components/
-  ui/             # shadcn/ui components (DO NOT MODIFY)
+  ui/             # shadcn/ui components (56 total)
+  theme-provider.tsx  # Dark mode provider
+hooks/
+  use-mobile.ts   # Mobile detection hook
 lib/
   utils.ts        # Utility functions (cn helper)
+public/
+  fonts/          # Custom fonts (Have Heart)
 ```
 
 ## Utility Function
