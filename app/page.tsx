@@ -28,9 +28,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-mesh bg-noise">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border/40 backdrop-blur-sm sticky top-0 z-50 bg-background/60">
+      <header className="border-b border-border sticky top-0 z-50 bg-background">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -91,10 +91,10 @@ export default function Home() {
       </section>
 
       {/* Design System Preview */}
-      <section className="py-16 px-6">
+      <section className="py-16 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-gradient-subtle text-2xl font-semibold mb-3">
+            <h2 className="text-2xl font-semibold mb-3">
               Your Design System
             </h2>
             <p className="text-muted-foreground">
@@ -104,7 +104,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {/* Colors */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+            <Card>
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Palette className="h-5 w-5 text-primary" />
@@ -115,7 +115,7 @@ export default function Home() {
                 </CardDescription>
                 <div className="flex gap-2">
                   <div className="h-8 w-8 rounded-lg bg-primary" title="Primary" />
-                  <div className="h-8 w-8 rounded-lg bg-secondary" title="Secondary" />
+                  <div className="h-8 w-8 rounded-lg bg-secondary border" title="Secondary" />
                   <div className="h-8 w-8 rounded-lg bg-destructive" title="Destructive" />
                   <div className="h-8 w-8 rounded-lg bg-success" title="Success" />
                   <div className="h-8 w-8 rounded-lg bg-warning" title="Warning" />
@@ -125,7 +125,7 @@ export default function Home() {
             </Card>
 
             {/* Typography */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+            <Card>
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Type className="h-5 w-5 text-primary" />
@@ -143,7 +143,7 @@ export default function Home() {
             </Card>
 
             {/* Components */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+            <Card>
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Layers className="h-5 w-5 text-primary" />
@@ -165,73 +165,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Gradient Showcase */}
-      <section className="py-16 px-6 bg-gradient-radial">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-gradient-subtle text-2xl font-semibold mb-3">
-              Premium Gradients
-            </h2>
-            <p className="text-muted-foreground">
-              Eye-catching text and background effects
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
-            <div className="p-6">
-              <h3 className="text-gradient-cyan-purple text-2xl font-bold mb-2">Cyan Purple</h3>
-              <p className="text-sm text-muted-foreground">Hero headings</p>
-            </div>
-            <div className="p-6">
-              <h3 className="text-gradient-aurora text-2xl font-bold mb-2">Aurora</h3>
-              <p className="text-sm text-muted-foreground">Feature highlights</p>
-            </div>
-            <div className="p-6">
-              <h3 className="text-gradient-ocean text-2xl font-bold mb-2">Ocean</h3>
-              <p className="text-sm text-muted-foreground">Calm sections</p>
-            </div>
-            <div className="p-6">
-              <h3 className="text-gradient-sunset text-2xl font-bold mb-2">Sunset</h3>
-              <p className="text-sm text-muted-foreground">Call to actions</p>
-            </div>
-            <div className="p-6">
-              <h3 className="text-gradient-silver text-2xl font-bold mb-2">Silver</h3>
-              <p className="text-sm text-muted-foreground">Premium feel</p>
-            </div>
-            <div className="p-6">
-              <h3 className="text-gradient-subtle text-2xl font-bold mb-2">Subtle</h3>
-              <p className="text-sm text-muted-foreground">Elegant text</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Features */}
-      <section className="py-16 px-6">
+      <section className="py-16 px-6 border-t border-border">
         <div className="max-w-4xl mx-auto">
           <div className="grid sm:grid-cols-2 gap-4">
-            <div className="flex items-start gap-3 p-4 rounded-lg bg-card/30">
+            <div className="flex items-start gap-3 p-4 rounded-lg border border-border">
               <Zap className="h-5 w-5 text-primary mt-0.5" />
               <div>
                 <p className="font-medium">Dark Mode Ready</p>
                 <p className="text-sm text-muted-foreground">Automatic theme adaptation</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-4 rounded-lg bg-card/30">
+            <div className="flex items-start gap-3 p-4 rounded-lg border border-border">
               <Zap className="h-5 w-5 text-primary mt-0.5" />
               <div>
                 <p className="font-medium">Tailwind CSS v4</p>
                 <p className="text-sm text-muted-foreground">Latest styling features</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-4 rounded-lg bg-card/30">
+            <div className="flex items-start gap-3 p-4 rounded-lg border border-border">
               <Zap className="h-5 w-5 text-primary mt-0.5" />
               <div>
                 <p className="font-medium">Next.js 16</p>
                 <p className="text-sm text-muted-foreground">App Router & React 19</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-4 rounded-lg bg-card/30">
+            <div className="flex items-start gap-3 p-4 rounded-lg border border-border">
               <Zap className="h-5 w-5 text-primary mt-0.5" />
               <div>
                 <p className="font-medium">TypeScript</p>
@@ -243,7 +202,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 py-8 px-6">
+      <footer className="border-t border-border py-8 px-6">
         <div className="max-w-6xl mx-auto flex flex-col items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
