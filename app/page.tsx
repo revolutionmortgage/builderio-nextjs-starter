@@ -20,20 +20,20 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="py-24 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      {/* Hero with Mesh Gradient */}
+      <section className="relative py-32 px-6 bg-gradient-mesh bg-noise overflow-hidden">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <Badge variant="secondary" className="mb-6">
             Builder.io Fusion + shadcn/ui
           </Badge>
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text">
+          <h1 className="text-gradient-cyan-purple text-5xl md:text-7xl font-bold tracking-tight mb-6">
             Design System Ready
           </h1>
           <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            This starter template includes 56 components, Rev brand colors, dark mode, and everything you need to create stunning UIs with AI.
+            56 components, stunning gradients, dark mode, and everything you need to create incredible UIs with AI.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
-            <Button size="lg" className="gap-2">
+            <Button size="lg" className="gap-2 glow-cyan">
               <Zap className="h-4 w-4" />
               Start Prompting
             </Button>
@@ -45,8 +45,11 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-16 px-6">
+      <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
+          <h2 className="text-gradient-subtle text-3xl font-bold text-center mb-12">
+            Everything You Need
+          </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <Card className="hover-lift bg-card/50 backdrop-blur-sm border-border/50">
               <CardHeader>
@@ -65,9 +68,9 @@ export default function Home() {
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
                   <Palette className="h-5 w-5 text-primary" />
                 </div>
-                <CardTitle>Brand Colors</CardTitle>
+                <CardTitle>Stunning Gradients</CardTitle>
                 <CardDescription>
-                  Rev&apos;s cyan brand palette with complementary colors for success, warning, info, and destructive states.
+                  Text gradients, mesh backgrounds, glow effects, and animated gradients for premium UIs.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -87,10 +90,49 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Color Showcase */}
-      <section className="py-16 px-6">
+      {/* Gradient Text Showcase */}
+      <section className="py-20 px-6 bg-gradient-radial">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-semibold mb-8 text-center">Color Palette</h2>
+          <h2 className="text-gradient-subtle text-3xl font-bold text-center mb-12">
+            Gradient Text Styles
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">text-gradient-cyan-purple</p>
+                <h3 className="text-gradient-cyan-purple text-4xl font-bold">Build the Future</h3>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">text-gradient-aurora</p>
+                <h3 className="text-gradient-aurora text-4xl font-bold">Magical Experience</h3>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">text-gradient-ocean</p>
+                <h3 className="text-gradient-ocean text-4xl font-bold">Fluid Design</h3>
+              </div>
+            </div>
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">text-gradient-silver</p>
+                <h3 className="text-gradient-silver text-4xl font-bold">Enterprise Grade</h3>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">text-gradient-sunset</p>
+                <h3 className="text-gradient-sunset text-4xl font-bold">Creative Energy</h3>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">text-gradient-subtle</p>
+                <h3 className="text-gradient-subtle text-4xl font-bold">Clean & Minimal</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Color Palette */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-gradient-subtle text-3xl font-bold text-center mb-12">Color Palette</h2>
           <div className="flex flex-wrap justify-center gap-4">
             <div className="flex flex-col items-center gap-2">
               <div className="h-16 w-16 rounded-xl bg-primary shadow-lg" />
@@ -124,10 +166,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Button Showcase */}
-      <section className="py-16 px-6">
+      {/* Glow Effects */}
+      <section className="py-20 px-6 bg-gradient-aurora">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-semibold mb-8 text-center">Button Variants</h2>
+          <h2 className="text-gradient-subtle text-3xl font-bold text-center mb-12">Glow Effects</h2>
+          <div className="flex flex-wrap justify-center gap-6">
+            <Button size="lg" className="glow-cyan">Cyan Glow</Button>
+            <Button size="lg" variant="secondary" className="glow-purple">Purple Glow</Button>
+            <Button size="lg" variant="outline" className="glow-pink">Pink Glow</Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Button Variants */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-gradient-subtle text-3xl font-bold text-center mb-12">Button Variants</h2>
           <div className="flex flex-wrap justify-center gap-4">
             <Button>Default</Button>
             <Button variant="secondary">Secondary</Button>
@@ -140,7 +194,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 py-8 px-6 mt-16">
+      <footer className="border-t border-border/40 py-8 px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-2 text-muted-foreground">
           <span>Built with</span>
           <Heart className="h-4 w-4 text-destructive fill-destructive" />

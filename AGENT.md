@@ -371,16 +371,123 @@ toast.error("Something went wrong")
 4. **Dark mode aware** - All colors automatically adapt to dark mode
 5. **Accessible** - All components are keyboard navigable and screen reader friendly
 
+## Stunning Gradients
+
+**USE GRADIENTS LIBERALLY** - They make UIs look premium and modern. Apply them to headings, backgrounds, borders, and buttons.
+
+### Gradient Text (For Headings)
+
+Make headings pop with gradient text. These look incredible on dark backgrounds:
+
+```tsx
+// Cyan to Purple - Modern tech feel (RECOMMENDED for hero headings)
+<h1 className="text-gradient-cyan-purple text-5xl font-bold">
+  Build the Future
+</h1>
+
+// Aurora - Ethereal northern lights effect
+<h1 className="text-gradient-aurora text-6xl font-bold">
+  Magical Experience
+</h1>
+
+// Silver/Platinum - Premium metallic look
+<h2 className="text-gradient-silver text-4xl font-semibold">
+  Enterprise Grade
+</h2>
+
+// Ocean - Deep and calm
+<h2 className="text-gradient-ocean text-3xl font-semibold">
+  Fluid Design
+</h2>
+
+// Sunset - Warm and inviting
+<h2 className="text-gradient-sunset text-3xl font-semibold">
+  Creative Energy
+</h2>
+
+// Subtle white to gray - Elegant on dark backgrounds
+<h1 className="text-gradient-subtle text-5xl font-bold">
+  Clean & Minimal
+</h1>
+```
+
+### Background Gradients
+
+```tsx
+// Mesh gradient - Modern blob/orb effect (great for hero sections)
+<section className="bg-gradient-mesh min-h-screen">
+
+// Aurora background - Subtle color shifts
+<div className="bg-gradient-aurora">
+
+// Radial glow - Spotlight from top
+<section className="bg-gradient-radial">
+
+// Animated gradient - Slowly shifting colors (attention-grabbing)
+<div className="bg-gradient-animated">
+
+// Add noise texture for depth (combine with any gradient)
+<section className="bg-gradient-mesh bg-noise">
+```
+
+### Gradient Borders (For Cards)
+
+```tsx
+// Glowing gradient border effect
+<div className="border-gradient p-6">
+  <h3>Premium Card</h3>
+</div>
+```
+
+### Glow Effects
+
+```tsx
+// Cyan glow (matches brand)
+<Button className="glow-cyan">Primary Action</Button>
+
+// Purple glow
+<Card className="glow-purple">Featured</Card>
+
+// Pink glow
+<Badge className="glow-pink">New</Badge>
+```
+
+### Example: Stunning Hero Section
+
+```tsx
+<section className="bg-gradient-mesh bg-noise min-h-screen flex items-center">
+  <div className="max-w-4xl mx-auto text-center px-6">
+    <Badge variant="secondary" className="mb-6">Now Available</Badge>
+    <h1 className="text-gradient-cyan-purple text-6xl md:text-7xl font-bold tracking-tight mb-6">
+      The Future of Finance
+    </h1>
+    <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+      Revolutionary tools for the modern investor.
+    </p>
+    <div className="flex gap-4 justify-center">
+      <Button size="lg" className="glow-cyan">Get Started</Button>
+      <Button size="lg" variant="outline">Learn More</Button>
+    </div>
+  </div>
+</section>
+```
+
+---
+
 ## Creating Stunning UIs
 
 ### Do:
-- Use the primary cyan color for CTAs and important actions
+- **USE GRADIENT TEXT ON HEADINGS** - especially hero headlines
+- **USE MESH/AURORA BACKGROUNDS** - for hero sections and key areas
+- Apply `glow-cyan` to primary CTAs for emphasis
+- Use `border-gradient` for featured cards
 - Apply `hover-lift` to interactive cards
 - Use `glass` for modern overlay effects
 - Combine `Card` with `shadow-brand` for elevated sections
 - Use `Badge` to highlight new/important items
 - Apply proper spacing (py-24 for sections, gap-6 for grids)
 - Use responsive classes: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+- Add `bg-noise` to gradients for texture and depth
 
 ### Don't:
 - Use raw color values - always use semantic tokens
@@ -388,6 +495,7 @@ toast.error("Something went wrong")
 - Overcrowd layouts - embrace whitespace
 - Skip loading states - use Skeleton and Spinner
 - Create custom components when shadcn/ui has one
+- Use plain white/black headings when a gradient would look better
 
 ---
 

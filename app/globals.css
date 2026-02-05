@@ -278,13 +278,168 @@
     border-color: var(--brand);
   }
 
-  /* Gradient utilities */
+  /* ============================================
+     GRADIENT TEXT - For stunning headings
+     Apply to headings for eye-catching effects
+     ============================================ */
+
+  /* Cyan to Purple - Modern tech feel */
+  .text-gradient-cyan-purple {
+    background: linear-gradient(135deg, #2CCCD3 0%, #a855f7 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Silver/Platinum - Premium metallic */
+  .text-gradient-silver {
+    background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 25%, #f1f5f9 50%, #94a3b8 75%, #e2e8f0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Aurora - Ethereal northern lights */
+  .text-gradient-aurora {
+    background: linear-gradient(135deg, #2CCCD3 0%, #22d3ee 25%, #a78bfa 50%, #f472b6 75%, #2CCCD3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Sunset - Warm and inviting */
+  .text-gradient-sunset {
+    background: linear-gradient(135deg, #f97316 0%, #ec4899 50%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Ocean - Deep and calm */
+  .text-gradient-ocean {
+    background: linear-gradient(135deg, #0ea5e9 0%, #2CCCD3 50%, #14b8a6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* White to gray - Subtle elegance for dark backgrounds */
+  .text-gradient-subtle {
+    background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ============================================
+     BACKGROUND GRADIENTS - For sections & cards
+     ============================================ */
+
+  /* Simple brand gradient */
   .gradient-brand {
     background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
   }
 
   .gradient-brand-dark {
     background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 100%);
+  }
+
+  /* Mesh gradient - Modern blob effect */
+  .bg-gradient-mesh {
+    background-color: oklch(0.14 0.01 260);
+    background-image:
+      radial-gradient(at 40% 20%, oklch(0.45 0.15 195 / 30%) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, oklch(0.50 0.18 280 / 25%) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, oklch(0.45 0.15 195 / 20%) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, oklch(0.55 0.20 340 / 20%) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, oklch(0.50 0.18 280 / 25%) 0px, transparent 50%);
+  }
+
+  /* Aurora background - Animated northern lights feel */
+  .bg-gradient-aurora {
+    background: linear-gradient(
+      125deg,
+      oklch(0.14 0.01 260) 0%,
+      oklch(0.18 0.05 195) 25%,
+      oklch(0.16 0.04 280) 50%,
+      oklch(0.18 0.05 195) 75%,
+      oklch(0.14 0.01 260) 100%
+    );
+  }
+
+  /* Radial glow - Spotlight effect */
+  .bg-gradient-radial {
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      oklch(0.30 0.10 195 / 40%) 0%,
+      oklch(0.14 0.01 260) 70%
+    );
+  }
+
+  /* Subtle noise texture overlay (pair with gradients) */
+  .bg-noise {
+    position: relative;
+  }
+
+  .bg-noise::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+  }
+
+  /* Card gradient border - Glowing edges */
+  .border-gradient {
+    position: relative;
+    background: var(--card);
+    border-radius: var(--radius);
+  }
+
+  .border-gradient::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #2CCCD3 0%, #a855f7 50%, #ec4899 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* Animated gradient background */
+  .bg-gradient-animated {
+    background: linear-gradient(
+      -45deg,
+      oklch(0.18 0.05 195),
+      oklch(0.16 0.04 280),
+      oklch(0.18 0.06 340),
+      oklch(0.18 0.05 195)
+    );
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Glow effect for elements */
+  .glow-cyan {
+    box-shadow: 0 0 20px oklch(0.75 0.14 195 / 30%), 0 0 40px oklch(0.75 0.14 195 / 20%);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px oklch(0.65 0.25 280 / 30%), 0 0 40px oklch(0.65 0.25 280 / 20%);
+  }
+
+  .glow-pink {
+    box-shadow: 0 0 20px oklch(0.70 0.20 340 / 30%), 0 0 40px oklch(0.70 0.20 340 / 20%);
   }
 
   /* Glass morphism */
