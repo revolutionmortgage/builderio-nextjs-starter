@@ -283,52 +283,44 @@
      Apply to headings for eye-catching effects
      ============================================ */
 
-  /* Cyan to Purple - Modern tech feel */
-  .text-gradient-cyan-purple {
-    background: linear-gradient(135deg, #2CCCD3 0%, #a855f7 50%, #ec4899 100%);
+  /* Base gradient text styles - prevents descender clipping */
+  [class*="text-gradient-"] {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    padding-bottom: 0.1em;
+    margin-bottom: -0.1em;
+    display: inline-block;
+  }
+
+  /* Cyan to Purple - Modern tech feel */
+  .text-gradient-cyan-purple {
+    background: linear-gradient(135deg, #2CCCD3 0%, #a855f7 50%, #ec4899 100%);
   }
 
   /* Silver/Platinum - Premium metallic */
   .text-gradient-silver {
     background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 25%, #f1f5f9 50%, #94a3b8 75%, #e2e8f0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   /* Aurora - Ethereal northern lights */
   .text-gradient-aurora {
     background: linear-gradient(135deg, #2CCCD3 0%, #22d3ee 25%, #a78bfa 50%, #f472b6 75%, #2CCCD3 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   /* Sunset - Warm and inviting */
   .text-gradient-sunset {
     background: linear-gradient(135deg, #f97316 0%, #ec4899 50%, #a855f7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   /* Ocean - Deep and calm */
   .text-gradient-ocean {
     background: linear-gradient(135deg, #0ea5e9 0%, #2CCCD3 50%, #14b8a6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   /* White to gray - Subtle elegance for dark backgrounds */
   .text-gradient-subtle {
     background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   /* ============================================
