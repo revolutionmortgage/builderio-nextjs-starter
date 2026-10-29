@@ -1,220 +1,148 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import { CheckCircle2, Lock } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Loader2, Sparkles, Palette, Type, Layers, Zap } from "lucide-react";
 
-const buildingMessages = [
-  "Analyzing your prompt...",
-  "Designing component structure...",
-  "Applying brand colors...",
-  "Generating layouts...",
-  "Adding interactions...",
-  "Optimizing for performance...",
-  "Polishing the details...",
-  "Almost there...",
-];
+const employee = {
+  name: "Jane Doe",
+  title: "Loan Officer",
+  email: "jane.doe@revolutionmortgage.com",
+  nmlsId: "1234567",
+};
 
 export default function Home() {
-  const [messageIndex, setMessageIndex] = useState(0);
+  const [form, setForm] = useState({
+    cellPhone: "(555) 123-4567",
+    officePhone: "(555) 987-6543",
+    linkedin: "https://www.linkedin.com/in/janedoe",
+    teamName: "Team Revolution",
+  });
+  const [saved, setSaved] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % buildingMessages.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+  const update = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({ ...prev, [key]: e.target.value }));
+    setSaved(false);
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaved(true);
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b border-border sticky top-0 z-50 bg-background">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://d1to58gssdw062.cloudfront.net/images/logo_blue.svg"
-              alt="Revolution Mortgage"
-              className="h-8"
-            />
-          </div>
-          <ThemeToggle />
-        </div>
-      </header>
-
-      {/* Hero - Building State */}
-      <section className="py-24 px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <Badge variant="outline" className="mb-6 border-primary/50 text-primary">
-            <Sparkles className="h-3 w-3 mr-1" />
-            Builder.io Fusion
-          </Badge>
-
-          <h1 className="text-gradient-cyan-purple text-4xl md:text-6xl font-bold tracking-tight mb-6">
-            Building Your App
-          </h1>
-
-          {/* Animated Loading Indicator */}
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <Loader2 className="h-5 w-5 text-primary animate-spin" />
-            <p
-              key={messageIndex}
-              className="text-lg text-muted-foreground animate-in fade-in slide-in-from-bottom-2 duration-500"
-            >
-              {buildingMessages[messageIndex]}
-            </p>
-          </div>
-
-          {/* Progress Dots */}
-          <div className="flex justify-center gap-2 mb-12">
-            {buildingMessages.map((_, i) => (
-              <div
-                key={i}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === messageIndex
-                    ? "w-8 bg-primary"
-                    : i < messageIndex
-                      ? "w-1.5 bg-primary/50"
-                      : "w-1.5 bg-muted"
-                }`}
-              />
-            ))}
-          </div>
-
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Your application is being crafted using our design system.
-            This page will automatically update once generation is complete.
-          </p>
-        </div>
-      </section>
-
-      {/* Design System Preview */}
-      <section className="py-16 px-6 border-t border-border">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl font-semibold mb-3">
-              Your Design System
-            </h2>
-            <p className="text-muted-foreground">
-              Pre-configured with Rev&apos;s brand guidelines and 56 production-ready components
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Colors */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2 mb-2">
-                  <Palette className="h-5 w-5 text-primary" />
-                  <CardTitle className="text-lg">Brand Colors</CardTitle>
-                </div>
-                <CardDescription className="mb-4">
-                  Cyan primary with complementary palette
-                </CardDescription>
-                <div className="flex gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary" title="Primary" />
-                  <div className="h-8 w-8 rounded-lg bg-secondary border" title="Secondary" />
-                  <div className="h-8 w-8 rounded-lg bg-destructive" title="Destructive" />
-                  <div className="h-8 w-8 rounded-lg bg-success" title="Success" />
-                  <div className="h-8 w-8 rounded-lg bg-warning" title="Warning" />
-                  <div className="h-8 w-8 rounded-lg bg-info" title="Info" />
-                </div>
-              </CardHeader>
-            </Card>
-
-            {/* Typography */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2 mb-2">
-                  <Type className="h-5 w-5 text-primary" />
-                  <CardTitle className="text-lg">Typography</CardTitle>
-                </div>
-                <CardDescription className="mb-4">
-                  Montserrat + Have Heart script fonts
-                </CardDescription>
-                <div className="space-y-1">
-                  <p className="font-bold">Montserrat Bold</p>
-                  <p className="font-normal text-muted-foreground">Montserrat Regular</p>
-                  <p className="font-script text-xl text-primary">Have Heart</p>
-                </div>
-              </CardHeader>
-            </Card>
-
-            {/* Components */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2 mb-2">
-                  <Layers className="h-5 w-5 text-primary" />
-                  <CardTitle className="text-lg">Components</CardTitle>
-                </div>
-                <CardDescription className="mb-4">
-                  56 shadcn/ui components included
-                </CardDescription>
-                <div className="flex flex-wrap gap-1.5">
-                  {["Button", "Card", "Dialog", "Form", "Table", "Chart", "+50"].map((comp) => (
-                    <Badge key={comp} variant="secondary" className="text-xs">
-                      {comp}
-                    </Badge>
-                  ))}
-                </div>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-16 px-6 border-t border-border">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div className="flex items-start gap-3 p-4 rounded-lg border border-border">
-              <Zap className="h-5 w-5 text-primary mt-0.5" />
-              <div>
-                <p className="font-medium">Dark Mode Ready</p>
-                <p className="text-sm text-muted-foreground">Automatic theme adaptation</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 p-4 rounded-lg border border-border">
-              <Zap className="h-5 w-5 text-primary mt-0.5" />
-              <div>
-                <p className="font-medium">Tailwind CSS v4</p>
-                <p className="text-sm text-muted-foreground">Latest styling features</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 p-4 rounded-lg border border-border">
-              <Zap className="h-5 w-5 text-primary mt-0.5" />
-              <div>
-                <p className="font-medium">Next.js 16</p>
-                <p className="text-sm text-muted-foreground">App Router & React 19</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 p-4 rounded-lg border border-border">
-              <Zap className="h-5 w-5 text-primary mt-0.5" />
-              <div>
-                <p className="font-medium">TypeScript</p>
-                <p className="text-sm text-muted-foreground">Full type safety</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-border py-8 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://d1to58gssdw062.cloudfront.net/images/logo_blue.svg"
             alt="Revolution Mortgage"
-            className="h-6 opacity-60"
+            className="h-8"
           />
-          <p className="text-sm text-muted-foreground text-center">
-            Official Revolution Mortgage Starter Template
-          </p>
+          <ThemeToggle />
         </div>
-      </footer>
+      </header>
+
+      <main className="py-12 px-6">
+        <div className="max-w-2xl mx-auto space-y-6">
+          <h1 className="text-gradient-cyan-purple text-4xl font-bold tracking-tight">
+            Employee Profile
+          </h1>
+
+          <Card>
+            <form onSubmit={onSubmit}>
+              <CardHeader>
+                <div className="flex items-center gap-4">
+                  <Avatar className="h-16 w-16">
+                    <AvatarFallback className="text-lg font-semibold">JD</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <CardTitle className="text-2xl">{employee.name}</CardTitle>
+                    <CardDescription className="mt-1">
+                      <Badge variant="secondary">{employee.title}</Badge>
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-6 mt-6">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                    <Lock className="h-4 w-4" />
+                    Managed by HR (read-only)
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2 sm:col-span-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input id="email" value={employee.email} readOnly disabled />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="title">Title</Label>
+                      <Input id="title" value={employee.title} readOnly disabled />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="nmls">NMLS ID</Label>
+                      <Input id="nmls" value={employee.nmlsId} readOnly disabled />
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-4">
+                  <p className="text-sm font-medium text-muted-foreground">Editable details</p>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="cell">Cell phone</Label>
+                      <Input id="cell" type="tel" value={form.cellPhone} onChange={update("cellPhone")} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="office">Office phone</Label>
+                      <Input id="office" type="tel" value={form.officePhone} onChange={update("officePhone")} />
+                    </div>
+                    <div className="space-y-2 sm:col-span-2">
+                      <Label htmlFor="linkedin">LinkedIn</Label>
+                      <Input id="linkedin" type="url" value={form.linkedin} onChange={update("linkedin")} />
+                    </div>
+                    <div className="space-y-2 sm:col-span-2">
+                      <Label htmlFor="team">Team name</Label>
+                      <Input id="team" value={form.teamName} onChange={update("teamName")} />
+                    </div>
+                  </div>
+                </div>
+
+                {saved && (
+                  <Alert>
+                    <CheckCircle2 className="h-4 w-4" />
+                    <AlertTitle>Profile saved</AlertTitle>
+                    <AlertDescription>Your changes have been saved successfully.</AlertDescription>
+                  </Alert>
+                )}
+              </CardContent>
+
+              <CardFooter className="mt-6 justify-end">
+                <Button type="submit">Save changes</Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </div>
+      </main>
     </div>
   );
 }
