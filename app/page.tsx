@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { CheckCircle2, Lock } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { CheckCircle2, Lock, LogIn } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,14 +13,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SignaturePreview } from "@/components/profile/signature-preview";
+import { FIELDS, isLicensed, type DetailKey, type Details } from "@/lib/profile-data";
 import {
-  FIELDS,
-  PEOPLE,
-  isLicensed,
-  type DetailKey,
-  type Details,
-  type Person,
-} from "@/lib/profile-data";
+  getProfile,
+  getSession,
+  listDemoPeople,
+  saveProfile,
+  signIn,
+  signOut,
+  type DemoPerson,
+  type Profile,
+  type Session,
+} from "@/lib/profile-api";
 
 function LockedRow({ id, label, value }: { id: string; label: string; value: string }) {
   return (
@@ -34,13 +38,19 @@ function LockedRow({ id, label, value }: { id: string; label: string; value: str
   );
 }
 
-function ProfileEditor({ person }: { person: Person }) {
+function ProfileEditor({ person }: { person: Profile }) {
   const [details, setDetails] = useState<Details>(person.details);
-  const [show, setShow] = useState(() =>
-    Object.fromEntries(FIELDS.map((f) => [f.key, true])) as Record<DetailKey, boolean>
-  );
+  const [show, setShow] = useState<Record<DetailKey, boolean>>(person.show);
   const [showPhoto, setShowPhoto] = useState(person.showPhoto);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const onSave = async () => {
+    setSaving(true);
+    await saveProfile(person.id, { details, show, showPhoto });
+    setSaving(false);
+    setSaved(true);
+  };
 
   const licensed = isLicensed(person);
   const visibleFields = FIELDS.filter((f) => !f.licensedOnly || licensed || (f.yextManaged && person.inYext));
@@ -155,7 +165,9 @@ function ProfileEditor({ person }: { person: Person }) {
         </Card>
 
         <div className="space-y-3">
-          <Button onClick={() => setSaved(true)}>Save changes</Button>
+          <Button onClick={onSave} disabled={saving}>
+            {saving ? "Saving..." : "Save changes"}
+          </Button>
           {saved && (
             <Alert role="status">
               <CheckCircle2 className="h-4 w-4" />
@@ -190,9 +202,51 @@ function ProfileEditor({ person }: { person: Person }) {
   );
 }
 
+
 export default function Home() {
-  const [personId, setPersonId] = useState(PEOPLE[0].id);
-  const person = PEOPLE.find((p) => p.id === personId) ?? PEOPLE[0];
+  const [people, setPeople] = useState<DemoPerson[]>([]);
+  const [personId, setPersonId] = useState("");
+  const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [ready, setReady] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const [list, existing] = await Promise.all([listDemoPeople(), getSession()]);
+      setPeople(list);
+      setPersonId(existing?.personId ?? list[0]?.id ?? "");
+      setSession(existing);
+      setReady(true);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!session) return;
+    let cancelled = false;
+    getProfile(session.personId).then((p) => {
+      if (!cancelled) setProfile(p);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [session]);
+
+  const handleSignIn = useCallback(async (id: string) => {
+    setBusy(true);
+    setSession(await signIn(id));
+    setBusy(false);
+  }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    setSession(null);
+  };
+
+  const onPickPerson = (id: string) => {
+    setPersonId(id);
+    if (session) handleSignIn(id);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -204,37 +258,63 @@ export default function Home() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="https://d1to58gssdw062.cloudfront.net/images/logo_blue.svg" alt="Revolution Mortgage" className="h-8" />
           <div className="flex items-center gap-3">
-            <Label htmlFor="demo-person" className="hidden sm:flex text-xs text-muted-foreground">
+            <Label htmlFor="demo-person" className="hidden md:flex text-xs text-muted-foreground">
               Demo as
             </Label>
-            <Select value={personId} onValueChange={setPersonId}>
-              <SelectTrigger id="demo-person" className="w-[300px] max-w-[60vw]">
+            <Select value={personId} onValueChange={onPickPerson} disabled={!ready}>
+              <SelectTrigger id="demo-person" className="w-[260px] max-w-[40vw]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {PEOPLE.map((p) => (
+                {people.map((p) => (
                   <SelectItem key={p.id} value={p.id}>
                     {p.label}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {session && (
+              <>
+                <span className="hidden lg:inline text-sm text-muted-foreground">{session.email}</span>
+                <Button variant="outline" size="sm" onClick={handleSignOut}>
+                  Sign out
+                </Button>
+              </>
+            )}
             <ThemeToggle />
           </div>
         </div>
       </header>
 
-      <main className="py-10 px-6">
-        <div className="max-w-6xl mx-auto space-y-6">
-          <div>
+      {!ready ? null : !session ? (
+        <main className="py-24 px-6">
+          <div className="max-w-md mx-auto text-center space-y-6">
             <h1 className="text-gradient-cyan-purple text-4xl font-bold tracking-tight">Your email signature</h1>
-            <p className="text-muted-foreground mt-2">
-              Review the details below and choose what appears. Locked fields come from HR systems and can&apos;t be changed here.
+            <p className="text-muted-foreground">
+              Sign in with your Revolution Mortgage account to review and update the details on your email signature.
+            </p>
+            <Button size="lg" className="glow-cyan" onClick={() => handleSignIn(personId)} disabled={busy}>
+              <LogIn className="h-4 w-4" />
+              {busy ? "Signing in..." : "Sign in with Microsoft"}
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              Demo only: this signs you in as the person selected in &ldquo;Demo as&rdquo;. No real authentication happens.
             </p>
           </div>
-          <ProfileEditor key={person.id} person={person} />
-        </div>
-      </main>
+        </main>
+      ) : (
+        <main className="py-10 px-6">
+          <div className="max-w-6xl mx-auto space-y-6">
+            <div>
+              <h1 className="text-gradient-cyan-purple text-4xl font-bold tracking-tight">Your email signature</h1>
+              <p className="text-muted-foreground mt-2">
+                Review the details below and choose what appears. Locked fields come from HR systems and can&apos;t be changed here.
+              </p>
+            </div>
+            {profile && profile.id === session.personId && <ProfileEditor key={profile.id} person={profile} />}
+          </div>
+        </main>
+      )}
     </div>
   );
 }
