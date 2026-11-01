@@ -530,3 +530,34 @@ import { cn } from "@/lib/utils"
   className
 )} />
 ```
+
+---
+
+## Deploying and the database (RevStack)
+
+This app deploys itself to RevStack, Revolution Mortgage's app hosting. You never run a
+deploy command.
+
+- **Pushing to `main`** deploys to `https://<repository-name>.dev.revstack.run`.
+- **Every pull request** gets a preview at `https://<repository-name>-pr-<number>.dev.revstack.run`,
+  removed when the pull request closes.
+- **What the app needs** is in `revstack.toml` at the repository root: whether it has a
+  database, its port, its health check and its size. Change that file, not anything else,
+  to change how the app runs.
+
+### Using the database
+
+- Postgres is on when `[postgres] enabled = true` in `revstack.toml`. The connection string
+  arrives as the `DATABASE_URL` environment variable; never hard-code one.
+- Query it on the server only, through `db()` from `@/lib/db` (server components, server
+  actions, route handlers). Never import it into a `"use client"` file.
+- Always pass values as parameters: `db().query("select * from notes where id = $1", [id])`.
+  Never build SQL by joining strings.
+- Create tables with `create table if not exists` before first use (see `app/notes/page.tsx`
+  for the pattern), so a fresh database or preview works without setup.
+- Each preview has its own empty database. Use sample data only; never real customer data.
+
+### Checks
+
+- `/api/health` must keep returning 200 when the app is healthy; RevStack uses it to decide
+  when a new version can take traffic.

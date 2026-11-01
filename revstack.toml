@@ -1,0 +1,19 @@
+# How this app runs on RevStack. Pushing to main deploys it; every pull request gets
+# its own preview. Nothing else needs setting up.
+#
+# The app's name (and so its address, <name>.dev.revstack.run) is this repository's
+# name unless you set it here:
+# app = "my-app"
+
+[web]
+port = 3000
+health = "/api/health"
+
+# Your own Postgres database, handed to the app as DATABASE_URL.
+[postgres]
+enabled = true
+
+[scale]
+replicas = 1
+cpu = "250m"
+memory = "512Mi"
