@@ -553,11 +553,13 @@ deploy command.
   actions, route handlers). Never import it into a `"use client"` file.
 - Always pass values as parameters: `db().query("select * from notes where id = $1", [id])`.
   Never build SQL by joining strings.
-- Create tables with `create table if not exists` before first use (see `app/notes/page.tsx`
-  for the pattern), so a fresh database or preview works without setup.
+- Create tables on first use, so a fresh database or preview works without setup. Copy the
+  `ensureTable` pattern in `app/notes/page.tsx`: `create table if not exists` inside a
+  transaction holding an advisory lock, run once per server process.
 - Each preview has its own empty database. Use sample data only; never real customer data.
 
 ### Checks
 
-- `/api/health` must keep returning 200 when the app is healthy; RevStack uses it to decide
-  when a new version can take traffic.
+- `/api/health` must keep returning 200 when the app is up; RevStack calls it every few
+  seconds to decide whether the app can take traffic. Keep it fast and do not make it
+  query the database (`/api/health?check=database` does that, on request).

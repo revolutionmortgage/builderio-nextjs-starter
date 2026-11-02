@@ -18,13 +18,33 @@ export const dynamic = "force-dynamic";
 
 type Note = { id: number; body: string; created_at: Date };
 
-async function ensureTable() {
-  await db().query(`
-    create table if not exists notes (
-      id serial primary key,
-      body text not null check (length(body) between 1 and 500),
-      created_at timestamptz not null default now()
-    )`);
+// Creates the table on first use. The advisory lock makes two first requests take turns,
+// since "if not exists" alone does not stop them racing; the promise means each server
+// process does this once.
+let tableReady: Promise<void> | undefined;
+
+function ensureTable(): Promise<void> {
+  tableReady ??= (async () => {
+    const client = await db().connect();
+    try {
+      await client.query("begin");
+      await client.query("select pg_advisory_xact_lock(hashtext('notes_schema'))");
+      await client.query(`
+        create table if not exists notes (
+          id serial primary key,
+          body text not null check (length(body) between 1 and 500),
+          created_at timestamptz not null default now()
+        )`);
+      await client.query("commit");
+    } catch (err) {
+      await client.query("rollback").catch(() => {});
+      tableReady = undefined; // try again on the next request
+      throw err;
+    } finally {
+      client.release();
+    }
+  })();
+  return tableReady;
 }
 
 async function addNote(formData: FormData) {
