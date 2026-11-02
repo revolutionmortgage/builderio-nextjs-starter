@@ -15,12 +15,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ ok: true, database: "not configured" });
   }
   try {
-    const { rows } = await db().query<{ version: string }>("select version()");
-    return NextResponse.json({ ok: true, database: rows[0].version.split(" on ")[0] });
+    await db().query("select 1");
+    return NextResponse.json({ ok: true, database: "ok" });
   } catch (error) {
-    return NextResponse.json(
-      { ok: false, database: error instanceof Error ? error.message : "unreachable" },
-      { status: 503 },
-    );
+    // Details go to the server log, never to the public response.
+    console.error("health check: database unreachable:", error instanceof Error ? error.message : error);
+    return NextResponse.json({ ok: false, database: "unreachable" }, { status: 503 });
   }
 }
