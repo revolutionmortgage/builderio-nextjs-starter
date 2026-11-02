@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { db, hasDatabase } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -23,27 +24,33 @@ type Note = { id: number; body: string; created_at: Date };
 // process does this once.
 let tableReady: Promise<void> | undefined;
 
+async function createTable(): Promise<void> {
+  const client = await db().connect();
+  try {
+    await client.query("begin");
+    await client.query("select pg_advisory_xact_lock(hashtext('notes_schema'))");
+    await client.query(`
+      create table if not exists notes (
+        id serial primary key,
+        body text not null check (length(body) between 1 and 500),
+        created_at timestamptz not null default now()
+      )`);
+    await client.query("commit");
+  } catch (err) {
+    await client.query("rollback").catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
 function ensureTable(): Promise<void> {
-  tableReady ??= (async () => {
-    const client = await db().connect();
-    try {
-      await client.query("begin");
-      await client.query("select pg_advisory_xact_lock(hashtext('notes_schema'))");
-      await client.query(`
-        create table if not exists notes (
-          id serial primary key,
-          body text not null check (length(body) between 1 and 500),
-          created_at timestamptz not null default now()
-        )`);
-      await client.query("commit");
-    } catch (err) {
-      await client.query("rollback").catch(() => {});
-      tableReady = undefined; // try again on the next request
-      throw err;
-    } finally {
-      client.release();
-    }
-  })();
+  // Any failure, including not getting a connection while the database wakes up, clears
+  // the cached promise so the next request tries again.
+  tableReady ??= createTable().catch((err) => {
+    tableReady = undefined;
+    throw err;
+  });
   return tableReady;
 }
 
@@ -93,7 +100,10 @@ export default async function NotesPage() {
       <Card>
         <CardContent className="pt-6">
           <form action={addNote} className="flex gap-2">
-            <Input name="body" placeholder="Write a note" maxLength={500} required />
+            <Label htmlFor="note-body" className="sr-only">
+              Note
+            </Label>
+            <Input id="note-body" name="body" placeholder="Write a note" maxLength={500} required />
             <Button type="submit">Save</Button>
           </form>
         </CardContent>
