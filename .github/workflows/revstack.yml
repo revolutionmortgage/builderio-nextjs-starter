@@ -1,0 +1,40 @@
+# Deploys this app to RevStack: main goes to <name>.dev.revstack.run, and each pull
+# request gets a preview at <name>-pr-<number>.dev.revstack.run that is removed when the
+# pull request closes. What the app needs is in revstack.toml.
+name: revstack
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+  workflow_dispatch:
+
+permissions:
+  id-token: write # proves to RevStack which repository is deploying; no stored keys
+  contents: read
+
+concurrency:
+  group: revstack-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  REVSTACK_API: https://api.dev.revstack.run
+
+jobs:
+  deploy:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - run: curl -fsSL "$REVSTACK_API/install.sh" | sh
+      - run: revstack deploy
+
+  remove-preview:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: curl -fsSL "$REVSTACK_API/install.sh" | sh
+      - run: revstack destroy --preview
