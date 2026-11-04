@@ -1,17 +1,23 @@
-# How this app runs on RevStack. Pushing to main deploys it; every pull request gets
-# its own preview. Nothing else needs setting up.
+# How this site runs on RevStack. Pushing to main deploys it; every pull request gets a
+# preview of its own, with its own database, removed when the pull request closes.
 #
-# The app's name (and so its address, <name>.dev.revstack.run) is this repository's
+# The site's name (and so its address, <name>.dev.revstack.run) is this repository's
 # name unless you set it here:
 # app = "my-app"
 
-[web]
-port = 3000
-health = "/api/health"
+# RevWeb: a website with a Postgres database (handed to the app as DATABASE_URL),
+# previews, and sign-in with your Revolution Mortgage Microsoft account.
+[plugins.revweb]
+# Anyone on the internet can open the production site, without signing in. Only for
+# sites meant for the public; development copies and previews always need sign-in.
+# public = true
 
-# Your own Postgres database, handed to the app as DATABASE_URL.
-[postgres]
-enabled = true
+[http_service]
+internal_port = 3000
+health = "/api/health"
+# Your own domain names for the production site (it also keeps its RevStack address).
+# RevStack shows the DNS records to add after the first deploy.
+# domains = ["www.example.com"]
 
 [scale]
 replicas = 1
