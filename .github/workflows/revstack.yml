@@ -19,8 +19,9 @@ permissions:
   id-token: write # proves to RevStack which repository is deploying; no stored keys
   contents: read
 
-# A newer push to a pull request replaces its unfinished preview deploy; deploys from
-# main always finish, in order.
+# A newer push to a pull request replaces its unfinished preview deploy. A deploy from
+# main that has started always finishes; if several pushes queue up behind it, only the
+# newest deploys.
 concurrency:
   group: revstack-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
