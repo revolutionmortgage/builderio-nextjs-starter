@@ -7,11 +7,11 @@ export const dynamic = "force-dynamic";
 // Sample page showing who is signed in, and reading their Microsoft 365 profile with the
 // token RevStack sign-in passes along. Safe to delete once your app has real pages.
 
-type Profile = { displayName?: string; jobTitle?: string; officeLocation?: string };
+type Profile = { id: string; displayName?: string; jobTitle?: string; officeLocation?: string };
 
 async function profile(token: string | null): Promise<Profile | null> {
   if (!token) return null;
-  const res = await fetch("https://graph.microsoft.com/v1.0/me?$select=displayName,jobTitle,officeLocation", {
+  const res = await fetch("https://graph.microsoft.com/v1.0/me?$select=id,displayName,jobTitle,officeLocation", {
     headers: { authorization: `Bearer ${token}` },
     cache: "no-store",
   });
@@ -39,7 +39,7 @@ export default async function MePage() {
               {me?.jobTitle && <Badge variant="secondary">{me.jobTitle}</Badge>}
               {me?.officeLocation && <Badge variant="secondary">{me.officeLocation}</Badge>}
             </div>
-            <p className="text-sm text-muted-foreground">Microsoft user ID: {user.id}</p>
+            {me && <p className="text-sm text-muted-foreground">Microsoft Entra user ID: {me.id}</p>}
             <p className="text-sm text-muted-foreground">
               Microsoft 365 profile: {me ? "read with your sign-in" : "not available"}
             </p>

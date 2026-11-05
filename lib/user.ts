@@ -13,8 +13,10 @@ export type User = {
   email: string;
   // The person's Microsoft sign-in name, usually the same as their email.
   username: string;
-  // Their Microsoft Entra user ID, which never changes even if their email does.
-  id: string;
+  // An ID for this person that stays the same within one RevStack environment, even if
+  // their email changes. It differs between non-production and production; for their
+  // Microsoft Entra user ID, read `id` from Microsoft Graph (see app/me/page.tsx).
+  signInId: string;
   // A token for Microsoft Graph that reads their own profile (User.Read). Keep it on the
   // server; never send it to the browser.
   graphToken: string | null;
@@ -28,7 +30,7 @@ export async function currentUser(): Promise<User | null> {
   return {
     email,
     username: h.get("x-forwarded-preferred-username") ?? email,
-    id: h.get("x-forwarded-user") ?? "",
+    signInId: h.get("x-forwarded-user") ?? "",
     graphToken: h.get("x-forwarded-access-token"),
   };
 }
