@@ -1,6 +1,11 @@
-# Deploys this app to RevStack: main goes to <name>.dev.revstack.run, and each pull
-# request gets a preview at <name>-pr-<number>.dev.revstack.run that is removed when the
-# pull request closes. What the app needs is in revstack.toml.
+# Deploys this app to RevStack. What the app needs is in revstack.toml.
+#
+#   - Each pull request gets a preview at <name>-pr-<number>.dev.revstack.run, with its
+#     own empty database, removed when the pull request closes.
+#   - main goes to <name>.dev.revstack.run (non-production), then to production at
+#     <name>.app.revstack.run through this repository's "production" environment. To
+#     require someone's approval before production, add a required reviewer to that
+#     environment in the repository's Settings → Environments.
 name: revstack
 
 on:
@@ -14,17 +19,32 @@ permissions:
   id-token: write # proves to RevStack which repository is deploying; no stored keys
   contents: read
 
+# A newer push to a pull request replaces its unfinished preview deploy. A deploy from
+# main that has started always finishes; if several pushes queue up behind it, only the
+# newest deploys.
 concurrency:
   group: revstack-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
-env:
-  REVSTACK_API: https://api.dev.revstack.run
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   deploy:
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
+    env:
+      REVSTACK_API: https://api.dev.revstack.run
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - run: curl -fsSL "$REVSTACK_API/install.sh" | sh
+      - run: revstack deploy
+
+  production:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: deploy
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      REVSTACK_API: https://api.app.revstack.run
     steps:
       - uses: actions/checkout@v5
       - uses: docker/setup-buildx-action@v3
@@ -34,6 +54,8 @@ jobs:
   remove-preview:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
+    env:
+      REVSTACK_API: https://api.dev.revstack.run
     steps:
       - uses: actions/checkout@v5
       - run: curl -fsSL "$REVSTACK_API/install.sh" | sh

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { db, hasDatabase } from "@/lib/db";
+import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -10,9 +10,6 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   if (request.nextUrl.searchParams.get("check") !== "database") {
     return NextResponse.json({ ok: true });
-  }
-  if (!hasDatabase()) {
-    return NextResponse.json({ ok: true, database: "not configured" });
   }
   try {
     await db().query("select 1");

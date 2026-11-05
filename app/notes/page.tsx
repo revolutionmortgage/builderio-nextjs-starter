@@ -1,16 +1,10 @@
 import { revalidatePath } from "next/cache";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { db, hasDatabase } from "@/lib/db";
+import { db, hasManagedDatabase } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -25,23 +19,15 @@ type Note = { id: number; body: string; created_at: Date };
 let tableReady: Promise<void> | undefined;
 
 async function createTable(): Promise<void> {
-  const client = await db().connect();
-  try {
-    await client.query("begin");
-    await client.query("select pg_advisory_xact_lock(hashtext('notes_schema'))");
-    await client.query(`
+  await db().transaction(async (tx) => {
+    await tx.query("select pg_advisory_xact_lock(hashtext('notes_schema'))");
+    await tx.query(`
       create table if not exists notes (
         id serial primary key,
         body text not null check (length(body) between 1 and 500),
         created_at timestamptz not null default now()
       )`);
-    await client.query("commit");
-  } catch (err) {
-    await client.query("rollback").catch(() => {});
-    throw err;
-  } finally {
-    client.release();
-  }
+  });
 }
 
 function ensureTable(): Promise<void> {
@@ -64,21 +50,6 @@ async function addNote(formData: FormData) {
 }
 
 export default async function NotesPage() {
-  if (!hasDatabase()) {
-    return (
-      <main className="max-w-2xl mx-auto px-6 py-16">
-        <Card>
-          <CardHeader>
-            <CardTitle>No database configured</CardTitle>
-            <CardDescription>
-              Set DATABASE_URL to a Postgres connection string to use this page.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </main>
-    );
-  }
-
   await ensureTable();
   const [{ rows: notes }, { rows: info }] = await Promise.all([
     db().query<Note>("select id, body, created_at from notes order by id desc limit 50"),
@@ -94,6 +65,7 @@ export default async function NotesPage() {
         <div className="flex flex-wrap gap-2">
           <Badge variant="outline">{info[0].version}</Badge>
           <Badge variant="secondary">database: {info[0].database}</Badge>
+          {!hasManagedDatabase() && <Badge variant="secondary">built-in (this computer only)</Badge>}
         </div>
       </div>
 
