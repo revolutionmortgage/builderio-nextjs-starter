@@ -24,6 +24,10 @@ ENV NODE_ENV=production \
     PORT=3000 \
     HOSTNAME=0.0.0.0
 RUN addgroup -g 1001 -S app && adduser -S app -u 1001 -G app
+# Where the built-in database (lib/db.ts) keeps its files when there is no DATABASE_URL.
+# On RevStack the app has a real database, so this only matters when running the image
+# by itself; those files last only as long as the container.
+RUN mkdir -p /app/.data && chown 1001:1001 /app/.data
 # Certificate authorities for AWS-managed Postgres, so database connections are verified.
 ADD --chmod=644 https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem /etc/ssl/certs/rds-global-bundle.pem
 COPY --from=build --chown=1001:1001 /app/public ./public

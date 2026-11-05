@@ -15,6 +15,8 @@ async function profile(token: string | null): Promise<Profile | null> {
     const res = await fetch("https://graph.microsoft.com/v1.0/me?$select=id,displayName,jobTitle,officeLocation", {
       headers: { authorization: `Bearer ${token}` },
       cache: "no-store",
+      // Don't hold up the page; without the profile it still shows who is signed in.
+      signal: AbortSignal.timeout(3000),
     });
     return res.ok ? await res.json() : null;
   } catch {
