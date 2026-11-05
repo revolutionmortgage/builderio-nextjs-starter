@@ -61,8 +61,9 @@ edit the file in GitHub.
   and previews always require sign-in, whatever this says.
 - **Use your own domain,** such as `www.example.com`. Add it to `domains`. After the next
   merge, the Actions run lists the DNS records to add at the domain's DNS host. The
-  domain starts working a few minutes after they're in place. Own domains are for
-  public sites only for now.
+  domain starts working a few minutes after they're in place. If you opened the domain
+  before adding the records, your computer may remember "not found" for a while; check
+  it from your phone instead. Own domains are for public sites only for now.
 - **Know who is signed in.** Sites behind sign-in can see the person's name and email;
   the `/me` page shows how (`lib/user.ts`).
 
