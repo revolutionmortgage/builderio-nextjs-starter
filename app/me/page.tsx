@@ -11,11 +11,16 @@ type Profile = { id: string; displayName?: string; jobTitle?: string; officeLoca
 
 async function profile(token: string | null): Promise<Profile | null> {
   if (!token) return null;
-  const res = await fetch("https://graph.microsoft.com/v1.0/me?$select=id,displayName,jobTitle,officeLocation", {
-    headers: { authorization: `Bearer ${token}` },
-    cache: "no-store",
-  });
-  return res.ok ? res.json() : null;
+  try {
+    const res = await fetch("https://graph.microsoft.com/v1.0/me?$select=id,displayName,jobTitle,officeLocation", {
+      headers: { authorization: `Bearer ${token}` },
+      cache: "no-store",
+    });
+    return res.ok ? await res.json() : null;
+  } catch {
+    // Microsoft Graph unreachable: show what sign-in already told us.
+    return null;
+  }
 }
 
 export default async function MePage() {
